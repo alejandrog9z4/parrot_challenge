@@ -35,44 +35,54 @@ public class OrdenService implements IOrdenService {
 
     @Override
     public OrdenResponseDto findById(UUID id) {
-        Optional<Orden> order = orderRepository.findById(id);
-        if (!order.isPresent()) {
-            throw new RuntimeException("Order not found");
+        try {
+            Optional<Orden> order = orderRepository.findById(id);
+            if (!order.isPresent()) {
+                throw new RuntimeException("Order not found");
+            }
+            Orden orden = order.get();
+            Mesero mesero = orden.getMesero();
+            List<OrdenProductosResponseDto> productos = Helper.mapToOrdenProductosResponseDto(orden.getProductos());
+            OrdenResponseDto ordenResponseDto = OrdenResponseDto.builder()
+                    .id(orden.getId())
+                    .nombre(orden.getNombre_cliente())
+                    .mesero(mesero.getNombre())
+                    .productos(productos)
+                    .total(orden.getTotal())
+                    .build();
+            return ordenResponseDto;
+        } catch (RuntimeException e) {
+            throw e;
+        } catch (Exception e) {
+            throw new RuntimeException("Error al buscar la orden: " + e.getMessage(), e);
         }
-        Orden orden = order.get();
-        Mesero mesero = orden.getMesero();
-        List<OrdenProductosResponseDto> productos = Helper.mapToOrdenProductosResponseDto(orden.getProductos());
-        OrdenResponseDto ordenResponseDto = OrdenResponseDto.builder()
-                .id(orden.getId())
-                .nombre(orden.getNombre_cliente())
-                .mesero(mesero.getNombre())
-                .productos(productos)
-                .total(orden.getTotal())
-                .build();
-        return ordenResponseDto;
     }
 
     @Override
     @Transactional
     public UUID createOrden(OrdenRequestDto ordenRequestDto) {
-        String email = SecurityContextHolder.getContext().getAuthentication().getName();
-        Mesero mesero = meseroService.findByEmail(email);
+        try {
+            String email = SecurityContextHolder.getContext().getAuthentication().getName();
+            Mesero mesero = meseroService.findByEmail(email);
 
-        Orden orden = Orden.builder()
-                .nombre_cliente(ordenRequestDto.getNombre())
-                .fecha(LocalDate.now())
-                .mesero(mesero)
-                .productos(new ArrayList<>())
-                .build();
-        Orden savedOrden = orderRepository.save(orden);
+            Orden orden = Orden.builder()
+                    .nombre_cliente(ordenRequestDto.getNombre())
+                    .fecha(LocalDate.now())
+                    .mesero(mesero)
+                    .productos(new ArrayList<>())
+                    .build();
+            Orden savedOrden = orderRepository.save(orden);
 
-        List<OrdenProductos> ordenProductos = Helper.mapToOrdenProductos(ordenRequestDto.getProductos(), orden);
-        List<OrdenProductos> savedOrdenProductos = ordenProductosService.createOrdenProductos(ordenProductos);
-        savedOrden.setProductos(savedOrdenProductos);
-        savedOrden.setTotal(Helper.calcularTotal(savedOrdenProductos));
-        orderRepository.save(savedOrden);
+            List<OrdenProductos> ordenProductos = Helper.mapToOrdenProductos(ordenRequestDto.getProductos(), orden);
+            List<OrdenProductos> savedOrdenProductos = ordenProductosService.createOrdenProductos(ordenProductos);
+            savedOrden.setProductos(savedOrdenProductos);
+            savedOrden.setTotal(Helper.calcularTotal(savedOrdenProductos));
+            orderRepository.save(savedOrden);
 
-        return savedOrden.getId();
+            return savedOrden.getId();
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @Override

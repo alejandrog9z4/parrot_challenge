@@ -5,6 +5,7 @@ import com.agudinoza.parrot.model.dto.OrdenProductosResponseDto;
 import com.agudinoza.parrot.model.entity.Orden;
 import com.agudinoza.parrot.model.entity.OrdenProductos;
 
+import java.time.LocalDate;
 import java.util.List;
 
 public class Helper {
@@ -24,6 +25,7 @@ public class Helper {
                         .precio_unitario(producto.getPrecio_unitario())
                         .cantidad(producto.getCantidad())
                         .orden(orden)
+                        .fechaCreacion(LocalDate.now())
                         .build())
                 .toList();
     }
@@ -34,7 +36,10 @@ public class Helper {
                         .nombre(producto.getNombre())
                         .precio_unitario(producto.getPrecio_unitario())
                         .cantidad(producto.getCantidad())
+                        .fecha_creacion(producto.getFechaCreacion())
                         .build())
                 .toList();
     }
+
+
 }

@@ -2,7 +2,6 @@ package com.agudinoza.parrot.service;
 
 import com.agudinoza.parrot.model.entity.OrdenProductos;
 import com.agudinoza.parrot.repository.IOrdenProductosRepository;
-import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -13,7 +12,7 @@ import java.util.UUID;
 public class OrdenProductosService implements IOrdenProductosService {
 
     @Autowired
-    private  IOrdenProductosRepository ordenProductosRepository;
+    private IOrdenProductosRepository ordenProductosRepository;
 
     @Override
     public List<OrdenProductos> findByOrdenId(UUID ordenId) {
@@ -22,7 +21,6 @@ public class OrdenProductosService implements IOrdenProductosService {
             throw new RuntimeException("No se encontraron productos para la orden con ID: " + ordenId);
         }
         return ordenProductos;
-
     }
 
     @Override
@@ -30,9 +28,12 @@ public class OrdenProductosService implements IOrdenProductosService {
         if (productos == null || productos.isEmpty()) {
             throw new IllegalArgumentException("La lista de productos no puede ser nula o estar vacía");
         }
-        List<OrdenProductos> savedProductos = ordenProductosRepository.saveAll(productos);
-        return savedProductos;
+
+        try {
+            List<OrdenProductos> savedProductos = ordenProductosRepository.saveAll(productos);
+            return savedProductos;
+        } catch (Exception e) {
+            throw new RuntimeException("Error al guardar los productos: " + e.getMessage(), e);
+        }
     }
-
-
 }

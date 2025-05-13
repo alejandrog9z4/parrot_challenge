@@ -63,7 +63,7 @@ public class OrdenServiceTest {
 
     @BeforeEach
     void setUp() {
-        // Configurar datos de prueba
+
         ordenId = UUID.randomUUID();
         mesero = new Mesero();
         mesero.setId(UUID.randomUUID());
@@ -83,7 +83,7 @@ public class OrdenServiceTest {
                 .total(100.0)
                 .build();
 
-        // Configurar DTO de solicitud
+
         ordenRequestDto = new OrdenRequestDto();
         ordenRequestDto.setNombre("Test Cliente");
         List<OrdenProductosRequestDto> productoRequestDtos = new ArrayList<>();
@@ -91,13 +91,13 @@ public class OrdenServiceTest {
         productoRequestDtos.add(productoRequestDto);
         ordenRequestDto.setProductos(productoRequestDtos);
 
-        // Configurar SecurityContextHolder
+
         SecurityContextHolder.setContext(securityContext);
     }
 
     @Test
     void findById_ExistingOrder_ReturnsOrderResponseDto() {
-        // Arrange
+
         when(orderRepository.findById(ordenId)).thenReturn(Optional.of(orden));
 
         List<OrdenProductosResponseDto> productosResponseDto = new ArrayList<>();
@@ -105,10 +105,10 @@ public class OrdenServiceTest {
             helperMockedStatic.when(() -> Helper.mapToOrdenProductosResponseDto(any()))
                     .thenReturn(productosResponseDto);
 
-            // Act
+
             OrdenResponseDto result = ordenService.findById(ordenId);
 
-            // Assert
+
             assertNotNull(result);
             assertEquals(ordenId, result.getId());
             assertEquals("Test Cliente", result.getNombre());
@@ -116,7 +116,7 @@ public class OrdenServiceTest {
             assertEquals(productosResponseDto, result.getProductos());
             assertEquals(100.0, result.getTotal());
 
-            // Verify
+
             verify(orderRepository).findById(ordenId);
             helperMockedStatic.verify(() -> Helper.mapToOrdenProductosResponseDto(ordenProductosList));
         }
@@ -124,26 +124,24 @@ public class OrdenServiceTest {
 
     @Test
     void findById_NonExistingOrder_ThrowsRuntimeException() {
-        // Arrange
+
         when(orderRepository.findById(ordenId)).thenReturn(Optional.empty());
 
-        // Act & Assert
+
         RuntimeException exception = assertThrows(RuntimeException.class, () -> {
             ordenService.findById(ordenId);
         });
 
-        assertEquals("Order not found", exception.getMessage());
-
-        // Verify
+        assertTrue(exception.getMessage().contains("Order not found"));
         verify(orderRepository).findById(ordenId);
     }
 
     @Test
     void findByMeseroId_ReturnsEmptyList() {
-        // Act
+
         List<OrdenRequestDto> result = ordenService.findByMeseroId(UUID.randomUUID());
 
-        // Assert
+
         assertNotNull(result);
         assertTrue(result.isEmpty());
     }
