@@ -1,0 +1,179 @@
+{
+	"info": {
+		"_postman_id": "a8932f4f-4e79-43ed-8281-0ebf50799f82",
+		"name": "parrot",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "22878627"
+	},
+	"item": [
+		{
+			"name": "login",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"mail\":\"alejandro_g9z4@hotmail.com\"\n\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8080/api/v1/auth/login",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"v1",
+						"auth",
+						"login"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "findmeserobynombre",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "localhost:8080/api/v1/mesero/nombre/agudinoz",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"v1",
+						"mesero",
+						"nombre",
+						"agudinoz"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "crearOrden",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"nombre\": \"Alejandro\",\n    \"productos\": [\n        {\n            \"nombre\": \"coca-cola\",\n            \"cantidad\": 2,\n            \"precio_unitario\": 10\n        },\n        {\n            \"nombre\": \"sopa del dia\",\n            \"cantidad\": 2,\n            \"precio_unitario\": 50\n        },\n        {\n            \"nombre\": \"milanesa\",\n            \"cantidad\": 2,\n            \"precio_unitario\": 120\n        }\n    ]\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8080/api/v1/orden",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"v1",
+						"orden"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "findOrdenById",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "localhost:8080/api/v1/orden/3cc27855-dc33-410d-a3dd-582157f766ac",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"v1",
+						"orden",
+						"3cc27855-dc33-410d-a3dd-582157f766ac"
+					],
+					"query": [
+						{
+							"key": "",
+							"value": null,
+							"disabled": true
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "getReport",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "localhost:8080/api/v1/reporte?inicio=2025-05-11&fin=2025-05-12",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"v1",
+						"reporte"
+					],
+					"query": [
+						{
+							"key": "inicio",
+							"value": "2025-05-11"
+						},
+						{
+							"key": "fin",
+							"value": "2025-05-12"
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
