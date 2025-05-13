@@ -22,8 +22,8 @@ public class ReporteController {
     public ResponseEntity<ReporteResponseDto> getReporte(@RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDate inicio, @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDate fin) {
         ReporteRequestDto request = new ReporteRequestDto(inicio, fin);
 
-       reporteService.getReporte(request);
+       ReporteResponseDto response =reporteService.getReporte(request);
 
-        return null;
+        return ResponseEntity.ok().body(response);
     }
 }

@@ -14,7 +14,7 @@ public class SwaggerConfig {
         return new OpenAPI()
                 .info(new Info()
                         .title("API")
-                        .description("REST API for Buy Now Pay Later service")
+                        .description("REST API Parrot  service")
                         .version("1.0")
                         .contact(new Contact()
                                 .name("Alejandro Gudino")
